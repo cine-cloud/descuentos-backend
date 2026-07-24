@@ -1,8 +1,10 @@
-﻿package com.unrn;
+package com.unrn.descuentos;
 
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@EnableRabbit
 @SpringBootApplication
 public class DescuentosApplication {
 
@@ -10,4 +12,3 @@ public class DescuentosApplication {
         SpringApplication.run(DescuentosApplication.class, args);
     }
 }
-
