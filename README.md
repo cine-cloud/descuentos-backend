@@ -96,3 +96,29 @@ La infraestructura centralizada del proyecto se encuentra en el directorio `/inf
 docker compose up -d descuentos-app
 ```
 *(Nota: la configuración del contenedor mapea el puerto host `8083:8083` y el puerto de base de datos PostgreSQL a `5434:5432`)*
+
+---
+
+## 🏗️ Diagramas C4
+
+### Diagrama de Contenedores
+
+```mermaid
+C4Container
+    title Diagrama de Contenedores - Microservicio Descuentos
+    
+    Container(gateway, "API Gateway", "Spring Cloud Gateway", "Enruta peticiones de clientes / admins")
+    Container(carrito, "Carrito Backend", "Microservicio", "Consulta descuentos activos")
+    
+    System_Boundary(b1, "Vertical Descuentos") {
+      Container(descuentosApp, "Descuentos Service", "Spring Boot", "Gestiona reglas de negocio para los descuentos")
+      ContainerDb(descuentosDb, "PostgreSQL", "Relacional", "Almacena los descuentos")
+    }
+    
+    System_Ext(rabbitmq, "RabbitMQ", "Message Broker")
+
+    Rel(gateway, descuentosApp, "ABM Descuentos (Admins)", "REST/HTTP")
+    Rel(carrito, descuentosApp, "Consulta descuentos (Síncrono)", "REST/HTTP")
+    Rel(descuentosApp, descuentosDb, "Lee/Escribe", "JDBC")
+    Rel(descuentosApp, rabbitmq, "Publica eventos (CREATE/UPDATE/DELETE)", "AMQP")
+```
